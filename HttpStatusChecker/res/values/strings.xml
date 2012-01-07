@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, HttpStatusChecker!</string>
+    <string name="app_name">HttpStatusChecker</string>
+    <string name="label_cb_ktw_abna">Kontowecker Abnahme</string>
+    <string name="label_cb_ktw_prod">Kontowecker Prod</string>
+    <string name="label_button_check">Check</string>
+    <drawable name="drawable_image_status_error">@android:drawable/presence_busy</drawable>
+    <drawable name="drawable_image_status_ok">@android:drawable/presence_online</drawable>
+    
+</resources>
