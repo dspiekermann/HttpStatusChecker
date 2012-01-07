@@ -32,9 +32,9 @@ public class HscApplicationPreferences {
 	
 	private void init(){
         p = context.getSharedPreferences(CommonConstants.PREFERENECES_APPLICATION, Context.MODE_PRIVATE);
-//		if (!p.getBoolean(PREF_KEY_INIT, false)){
+		if (!p.getBoolean(PREF_KEY_INIT, false)){
 			setDefaultPreferences();
-//		}
+		}
 		fillCheckObjects();
 	}
 	
