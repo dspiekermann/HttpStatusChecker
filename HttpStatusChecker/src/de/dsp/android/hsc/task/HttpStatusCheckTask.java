@@ -20,13 +20,16 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import de.dsp.android.hsc.R;
 
-public class HttpStatusCheckTask extends AsyncTask<String, Integer, Boolean>{
+public class HttpStatusCheckTask extends AsyncTask<String, Integer, Integer>{
 	
 	private ProgressBar progressBar;
 	private ImageView imageViewStatus;
@@ -45,7 +48,7 @@ public class HttpStatusCheckTask extends AsyncTask<String, Integer, Boolean>{
 	}
 	
 	@Override
-	protected void onPostExecute(Boolean result) {
+	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
 
     	if (progressBar!=null){
@@ -54,7 +57,21 @@ public class HttpStatusCheckTask extends AsyncTask<String, Integer, Boolean>{
 
 		if (imageViewStatus!=null){
     		imageViewStatus.setVisibility(View.VISIBLE);
-    		if (result){
+    		imageViewStatus.setClickable(true);
+    		final AlertDialog alertDialog = new AlertDialog.Builder(imageViewStatus.getContext()).create();  
+    	    alertDialog.setTitle("Http Status Code");  
+    	    alertDialog.setMessage("" + result);  
+    	    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {  
+    	      public void onClick(DialogInterface dialog, int which) {  
+    	        return;  
+    	    } });  
+    	    imageViewStatus.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					alertDialog.show();
+				}
+			} );
+    		if (result==200){
         		imageViewStatus.setImageResource(R.drawable.drawable_image_status_ok);
     		} else {
         		imageViewStatus.setImageResource(R.drawable.drawable_image_status_error);
@@ -64,11 +81,11 @@ public class HttpStatusCheckTask extends AsyncTask<String, Integer, Boolean>{
 	}
 
 	@Override
-	protected Boolean doInBackground(String... params) {
+	protected Integer doInBackground(String... params) {
     	return checkHttpStatus(params[0]);
 	}
 
-    private boolean checkHttpStatus(String urlString){
+    private int checkHttpStatus(String urlString){
 		try {
 			URL url = new URL(urlString);
 			URI uri = url.toURI();
@@ -76,8 +93,9 @@ public class HttpStatusCheckTask extends AsyncTask<String, Integer, Boolean>{
 	    	HttpClient httpclient = getHttpClient();
 	    	HttpResponse response = httpclient.execute(httpRequest);
 	    	if (response!=null){
-	    		int statusCode = response.getStatusLine().getStatusCode();
-	    		return statusCode == 200;
+	    		return response.getStatusLine().getStatusCode();
+//	    		int statusCode = response.getStatusLine().getStatusCode();
+//	    		return statusCode == 200;
 	    	}
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -86,7 +104,7 @@ public class HttpStatusCheckTask extends AsyncTask<String, Integer, Boolean>{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	return false;
+    	return -1;
     }
     
     private DefaultHttpClient getHttpClient() {
