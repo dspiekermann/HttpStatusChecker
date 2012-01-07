@@ -60,7 +60,8 @@ public class HttpStatusCheckerActivity extends Activity {
             p = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             checkBox.setLayoutParams(p);
             checkBox.setText(checkObject.getName());
-            //TODO Checkstatus setzen
+            //TODO Checkstatus aus properties setzen
+            checkBox.setChecked(true);
             subLayout.addView(checkBox);
         }
         
